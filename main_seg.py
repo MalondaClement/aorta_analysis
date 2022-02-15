@@ -12,11 +12,13 @@ from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
 
 from datasets.irm_seg import IRM_SEG
-from models.utils import get_model
+from models.utils import get_3d_segmentation_model
 
 if __name__ == "__main__" :
 
     epochs = 40
+
+    model = get_3d_segmentation_model("UNet3D", num_classes=14)
 
     train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/img")
 

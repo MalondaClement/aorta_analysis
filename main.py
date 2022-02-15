@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from torchvision.transforms import ToTensor
 
 from datasets.irm import IRM
-from models.utils import get_model
+from models.utils import get_classification_model
 
 if __name__ == "__main__" :
 
