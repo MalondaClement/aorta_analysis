@@ -35,19 +35,18 @@ if __name__ == "__main__" :
 
         for i, data in enumerate(train_dataloader, 0) :
             print("Batch {}/{}".format(i+1, int(len(train)/4)))
-            break
-        break
-            # inputs, labels = data
-            #
-            # optimizer.zero_grad()
-            #
-            # outputs = model(inputs)
-            #
-            # loss = criterion(outputs, labels)
-            #
-            # loss.backward()
-            #
-            # optimizer.step()
+
+            inputs, labels = data
+
+            optimizer.zero_grad()
+
+            outputs = model(inputs)
+
+            loss = criterion(outputs, labels)
+
+            loss.backward()
+
+            optimizer.step()
 
     end = time.time()
     print("Training done in {} s".format(end - start))
