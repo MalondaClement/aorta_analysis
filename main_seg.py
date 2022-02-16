@@ -21,7 +21,7 @@ if __name__ == "__main__" :
 
     model = get_2d_segmentation_model("FCN_Resnet101", num_classes=14)
 
-    train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label")
+    train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", transform=ToTensor(), target_transform=ToTensor())
 
     train_dataloader = DataLoader(train, batch_size=4, shuffle=True, drop_last=True)
 
@@ -35,18 +35,19 @@ if __name__ == "__main__" :
 
         for i, data in enumerate(train_dataloader, 0) :
             print("Batch {}/{}".format(i+1, int(len(train)/4)))
-
-            inputs, labels = data
-
-            optimizer.zero_grad()
-
-            outputs = model(inputs)
-
-            loss = criterion(outputs, labels)
-
-            loss.backward()
-
-            optimizer.step()
+            break
+        break
+            # inputs, labels = data
+            #
+            # optimizer.zero_grad()
+            #
+            # outputs = model(inputs)
+            #
+            # loss = criterion(outputs, labels)
+            #
+            # loss.backward()
+            #
+            # optimizer.step()
 
     end = time.time()
     print("Training done in {} s".format(end - start))
