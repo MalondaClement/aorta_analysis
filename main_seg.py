@@ -13,13 +13,13 @@ from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
 
 from datasets.irm_seg import IRM_SEG
-from models.utils import get_3d_segmentation_model
+from models.utils import get_2d_segmentation_model
 
 if __name__ == "__main__" :
 
-    epochs = 1
+    epochs = 4
 
-    model = get_3d_segmentation_model("UNet3D", num_classes=14)
+    model = get_2d_segmentation_model("FCN_Resnet101", num_classes=14)
 
     train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label")
 
@@ -35,6 +35,7 @@ if __name__ == "__main__" :
 
         for i, data in enumerate(train_dataloader, 0) :
             print("Batch {}/{}".format(i+1, int(len(train)/4)))
+
             inputs, labels = data
 
             optimizer.zero_grad()
