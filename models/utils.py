@@ -9,7 +9,7 @@ import torchvision.models as models
 
 def get_3d_segmentation_model(model_name, num_classes) :
     if model_name == "UNet3D" :
-        return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=False)
+        return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=85, out_channels=num_classes, init_features=32, pretrained=False)
 
 def get_classification_model(model_name, num_classes) :
 
