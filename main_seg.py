@@ -39,7 +39,7 @@ if __name__ == "__main__" :
 
             optimizer.zero_grad()
 
-            outputs = net(inputs)
+            outputs = model(inputs)
 
             loss = criterion(outputs, labels)
 
