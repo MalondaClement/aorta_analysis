@@ -28,13 +28,13 @@ if __name__ == "__main__" :
         model = torch.nn.DataParallel(model).cuda()
         print('Model pushed to {} GPU(s), type {}.'.format(torch.cuda.device_count(), torch.cuda.get_device_name(0)))
 
-    train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", transform=ToTensor(), target_transform=ToTensor())
+    train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", transform=ToTensor())
 
     train_dataloader = DataLoader(train, batch_size=batch_size, shuffle=True, drop_last=True)
 
     criterion = nn.CrossEntropyLoss()
 
-    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.SGD(model.parameters(), lr=0.001)
 
     start = time.time()
 
@@ -60,6 +60,10 @@ if __name__ == "__main__" :
                 loss.backward()
 
                 optimizer.step()
+
+                del inputs
+                del labels
+                torch.cuda.empty_cache()
 
     end = time.time()
     print("Training done in {} s".format(end - start))

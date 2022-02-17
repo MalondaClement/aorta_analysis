@@ -33,7 +33,6 @@ class IRM_SEG(Dataset) :
     def __len__(self) :
         return len(self.images_list)
 
-    # TODO: Get the same number of slice each time
     def __getitem__(self, idx) :
         image = nib.load(os.path.join(self.images_dir, self.images_list[idx][0]))
         tmp = image.get_fdata()[:,:,self.images_list[idx][1]]
