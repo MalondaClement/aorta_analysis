@@ -21,6 +21,10 @@ if __name__ == "__main__" :
 
     model = get_2d_segmentation_model("FCN_Resnet101", num_classes=14)
 
+    if torch.cuda.is_available():
+        model = torch.nn.DataParallel(model).cuda()
+        print('Model pushed to {} GPU(s), type {}.'.format(torch.cuda.device_count(), torch.cuda.get_device_name(0)))
+
     train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", transform=ToTensor(), target_transform=ToTensor())
 
     train_dataloader = DataLoader(train, batch_size=4, shuffle=True, drop_last=True)
@@ -30,23 +34,27 @@ if __name__ == "__main__" :
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
     start = time.time()
+
     for epoch in range(epochs) :
         print("Epoch {}/{}".format(epoch+1, epochs))
 
-        for i, data in enumerate(train_dataloader, 0) :
-            print("Batch {}/{}".format(i+1, int(len(train)/4)))
+        with torch.set_grad_enable(True) :
+            for i, data in enumerate(train_dataloader, 0) :
+                print("Batch {}/{}".format(i+1, int(len(train)/4)))
 
-            inputs, labels = data
+                inputs, labels = data
+                inputs = inputs.double().cuda()
+                labels = labels.long().cuda()
 
-            optimizer.zero_grad()
+                optimizer.zero_grad()
 
-            outputs = model(inputs)
+                outputs = model(inputs)
 
-            loss = criterion(outputs, labels)
+                loss = criterion(outputs, labels)
 
-            loss.backward()
+                loss.backward()
 
-            optimizer.step()
+                optimizer.step()
 
     end = time.time()
     print("Training done in {} s".format(end - start))

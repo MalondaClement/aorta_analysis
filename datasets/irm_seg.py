@@ -36,7 +36,12 @@ class IRM_SEG(Dataset) :
     # TODO: Get the same number of slice each time
     def __getitem__(self, idx) :
         image = nib.load(os.path.join(self.images_dir, self.images_list[idx][0]))
-        image = image.get_fdata()[:,:,self.images_list[idx][1]]
+        tmp = image.get_fdata()[:,:,self.images_list[idx][1]]
+        # image = image.get_fdata()[:,:,self.images_list[idx][1]]
+        image = np.array([tmp, tmp, tmp])
+        image = image.transpose(1, 2, 0)
+        print(np.min(image))
+        print(np.max(image))
 
         label = nib.load(os.path.join(self.labels_dir, self.labels_list[idx][0]))
         label = label.get_fdata()[:,:,self.labels_list[idx][1]]
