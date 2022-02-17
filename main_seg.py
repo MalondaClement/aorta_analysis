@@ -39,7 +39,7 @@ if __name__ == "__main__" :
     for epoch in range(epochs) :
         print("Epoch {}/{}".format(epoch+1, epochs))
 
-        with torch.set_grad_enable(True) :
+        with torch.set_grad_enabled(True) :
             for i, data in enumerate(train_dataloader, 0) :
                 print("Batch {}/{}".format(i+1, int(len(train)/4)))
 
