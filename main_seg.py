@@ -32,9 +32,9 @@ if __name__ == "__main__" :
 
     train_dataloader = DataLoader(train, batch_size=batch_size, shuffle=True, drop_last=True)
 
-    eval = IRM_SEG(images_dir="../RawData/Evaluating/img", labels_dir="../RawData/Evaluating/label", transform=ToTensor())
+    val = IRM_SEG(images_dir="../RawData/Evaluating/img", labels_dir="../RawData/Evaluating/label", transform=ToTensor())
 
-    eval_dataloader = DataLoader(eval, batch_size, shuffle=True, drop_last=True)
+    val_dataloader = DataLoader(eval, batch_size, shuffle=True, drop_last=True)
 
     criterion = nn.CrossEntropyLoss()
 
@@ -43,11 +43,12 @@ if __name__ == "__main__" :
     start = time.time()
 
     for epoch in range(epochs) :
-        print("Epoch {}/{}".format(epoch+1, epochs))
+        print("Train for epoch {}/{}".format(epoch+1, epochs))
 
+        model.train()
         with torch.set_grad_enabled(True) :
             for i, data in enumerate(train_dataloader, 0) :
-                print("Batch {}/{}".format(i+1, int(len(train)/batch_size)))
+                # print("Batch {}/{}".format(i+1, int(len(train)/batch_size)))
 
                 inputs, labels = data
                 inputs = inputs.float().cuda()
@@ -68,6 +69,23 @@ if __name__ == "__main__" :
                 del inputs
                 del labels
                 torch.cuda.empty_cache()
+
+        #TEST : Implement validation for each epoch 
+        print("Eval for epoch {}/{}".format(epoch+1, epochs))
+        model.eval()
+        with torch.no_grad()
+            for i, data in enumerate(val_dataloader, 0) :
+                inputs, labels = data
+                inputs = inputs.float().cuda()
+                labels = labels.long().cuda()
+
+                outputs = model(inputs)
+
+                outputs = outputs["out"]
+
+                loss = criterion(outputs, labels)
+
+                print(loss.item())
 
     end = time.time()
     print("Training done in {} s".format(end - start))
