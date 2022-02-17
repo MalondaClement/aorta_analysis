@@ -20,7 +20,7 @@ if __name__ == "__main__" :
 
     epochs = 4
 
-    batch_size = 4
+    batch_size = 2
 
     model = get_2d_segmentation_model("DeepLabV3_MobileNetV3", num_classes=14)
 
