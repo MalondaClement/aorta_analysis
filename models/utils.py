@@ -11,8 +11,28 @@ def get_3d_segmentation_model(model_name, num_classes) :
     if model_name == "UNet3D" :
         return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=85, out_channels=num_classes, init_features=32, pretrained=False)
 
-def get_classification_model(model_name, num_classes) :
+def get_2d_segmentation_model(model_name, num_classes):
+    if  model_name == "DeepLabV3_Resnet50":
+        return models.segmentation.deeplabv3_resnet50(pretrained=False, num_classes = num_classes)
 
+    elif model_name == "DeepLabV3_Resnet101":
+        from torchvision.models.segmentation import deeplabv3_resnet101
+        return models.segmentation.deeplabv3_resnet101(pretrained=False, num_classes = num_classes)
+
+    elif model_name == "DeepLabV3_MobileNetV3":
+        from torchvision.models.segmentation import deeplabv3_mobilenet_v3_large
+        return models.segmentation.deeplabv3_mobilenet_v3_large(pretrained=False, num_classes = num_classes)
+
+    elif model_name == "FCN_Resnet50":
+        from torchvision.models.segmentation import fcn_resnet50
+        return models.segmentation.fcn_resnet50(pretrained=False, num_classes = num_classes)
+
+    elif model_name == "FCN_Resnet101":
+        from torchvision.models.segmentation import fcn_resnet101
+        return models.segmentation.fcn_resnet101(pretrained=False, num_classes = num_classes)
+    exit(1)
+
+def get_classification_model(model_name, num_classes) :
     if model_name == "AlexNet" :
         return models.alexnet(pretrained = False, progress = True, num_classes = num_classes)
     elif model_name == "VGG" :
