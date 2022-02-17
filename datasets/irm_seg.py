@@ -40,8 +40,6 @@ class IRM_SEG(Dataset) :
         # image = image.get_fdata()[:,:,self.images_list[idx][1]]
         image = np.array([tmp, tmp, tmp])
         image = image.transpose(1, 2, 0)
-        print(np.min(image))
-        print(np.max(image))
 
         label = nib.load(os.path.join(self.labels_dir, self.labels_list[idx][0]))
         label = label.get_fdata()[:,:,self.labels_list[idx][1]]

@@ -22,7 +22,7 @@ if __name__ == "__main__" :
 
     batch_size = 4
 
-    model = get_2d_segmentation_model("FCN_Resnet101", num_classes=14)
+    model = get_2d_segmentation_model("DeepLabV3_MobileNetV3", num_classes=14)
 
     if torch.cuda.is_available():
         model = torch.nn.DataParallel(model).cuda()
@@ -52,6 +52,8 @@ if __name__ == "__main__" :
                 optimizer.zero_grad()
 
                 outputs = model(inputs)
+
+                outputs = outputs["out"]
 
                 loss = criterion(outputs, labels)
 
