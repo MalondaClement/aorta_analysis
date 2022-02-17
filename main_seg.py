@@ -32,9 +32,9 @@ if __name__ == "__main__" :
 
     train_dataloader = DataLoader(train, batch_size=batch_size, shuffle=True, drop_last=True)
 
-    val = IRM_SEG(images_dir="../RawData/Evaluating/img", labels_dir="../RawData/Evaluating/label", transform=ToTensor())
+    validation = IRM_SEG(images_dir="../RawData/Evaluating/img", labels_dir="../RawData/Evaluating/label", transform=ToTensor())
 
-    val_dataloader = DataLoader(eval, batch_size, shuffle=True, drop_last=True)
+    validation_dataloader = DataLoader(eval, batch_size, shuffle=True, drop_last=True)
 
     criterion = nn.CrossEntropyLoss()
 
