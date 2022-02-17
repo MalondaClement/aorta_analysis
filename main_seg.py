@@ -70,10 +70,10 @@ if __name__ == "__main__" :
                 del labels
                 torch.cuda.empty_cache()
 
-        #TEST : Implement validation for each epoch 
+        #TEST : Implement validation for each epoch
         print("Eval for epoch {}/{}".format(epoch+1, epochs))
         model.eval()
-        with torch.no_grad()
+        with torch.no_grad() :
             for i, data in enumerate(val_dataloader, 0) :
                 inputs, labels = data
                 inputs = inputs.float().cuda()
