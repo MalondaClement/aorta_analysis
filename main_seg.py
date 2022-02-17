@@ -1,5 +1,5 @@
 #
-# main.py
+# main_seg.py
 #
 # Clément Malonda
 #
@@ -20,6 +20,8 @@ if __name__ == "__main__" :
 
     epochs = 4
 
+    batch_size = 4
+
     model = get_2d_segmentation_model("FCN_Resnet101", num_classes=14)
 
     if torch.cuda.is_available():
@@ -28,7 +30,7 @@ if __name__ == "__main__" :
 
     train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", transform=ToTensor(), target_transform=ToTensor())
 
-    train_dataloader = DataLoader(train, batch_size=4, shuffle=True, drop_last=True)
+    train_dataloader = DataLoader(train, batch_size=batch_size, shuffle=True, drop_last=True)
 
     criterion = nn.CrossEntropyLoss()
 
@@ -41,10 +43,10 @@ if __name__ == "__main__" :
 
         with torch.set_grad_enabled(True) :
             for i, data in enumerate(train_dataloader, 0) :
-                print("Batch {}/{}".format(i+1, int(len(train)/4)))
+                print("Batch {}/{}".format(i+1, int(len(train)/batch_size)))
 
                 inputs, labels = data
-                inputs = inputs.double().cuda()
+                inputs = inputs.float().cuda()
                 labels = labels.long().cuda()
 
                 optimizer.zero_grad()
