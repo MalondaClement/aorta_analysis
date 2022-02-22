@@ -17,6 +17,7 @@ from torch.utils.data import DataLoader
 
 from datasets.irm_seg import IRM_SEG
 from models.utils import get_2d_segmentation_model
+from utils.metrics import compute_iou
 
 if __name__ == "__main__" :
 
@@ -40,6 +41,8 @@ if __name__ == "__main__" :
     train_loss = list()
     val_loss = list()
 
+    train_iou = list()
+
     start = time.time()
 
     for epoch in range(epochs) :
@@ -47,6 +50,8 @@ if __name__ == "__main__" :
 
         train_loss_epoch = list()
         val_loss_epoch = list()
+
+        train_iou_epoch = list()
 
         model.train()
         with torch.set_grad_enabled(True) :
@@ -68,12 +73,16 @@ if __name__ == "__main__" :
 
                 train_loss_epoch.append(loss.item())
 
+                train_iou_epoch.append(compute_iou(torch.argmax(outputs, 1), labels.numpy()))
+
                 del inputs
                 del labels
                 torch.cuda.empty_cache()
 
         train_loss.append(np.mean(train_loss_epoch))
         print("Train loss for epoch {} {}".format(epoch, train_loss[-1]))
+        train_iou.append(np.mean(train_iou_epoch))
+        print("IoU for epoch {} {}".format(epoch, train_iou[-1]))
 
         #TEST : Implement validation for each epoch
         print("Eval for epoch {}/{}".format(epoch+1, epochs))
@@ -90,7 +99,6 @@ if __name__ == "__main__" :
 
                 loss = criterion(outputs, labels)
 
-                # print(loss.item())
                 val_loss_epoch.append(loss.item())
 
         val_loss.append(np.mean(val_loss_epoch))

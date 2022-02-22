@@ -6,7 +6,7 @@
 import numpy as np
 #
 
-def iou(outputs, targets):
+def compute_iou(outputs, targets):
     intersection = (outputs & targets).float().sum((1, 2))
     union = (outputs | targets).float().sum(1, 2)
 
