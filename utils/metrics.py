@@ -2,9 +2,11 @@
 # utils/metrics.py
 #
 # Clément Malonda
+#
 
 import numpy as np
-#
+
+SMOOTH = 1e-6
 
 def compute_iou(outputs, targets):
     intersection = (outputs & targets).sum((1, 2))
