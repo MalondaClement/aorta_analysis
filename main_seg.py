@@ -4,7 +4,9 @@
 # Clément Malonda
 #
 
+import os
 import time
+from datetime import date
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -24,7 +26,7 @@ if __name__ == "__main__" :
     epochs = 4
     batch_size = 2
     model_name = "DeepLabV3_MobileNetV3"
-    save_path = model_name + date.today().isoformat() + "-" + str(int(time.time()))
+    save_path = model_name + "-" +date.today().isoformat() + "-" + str(int(time.time()))
 
     if not os.path.isdir("../saves"):
         os.makedirs("../saves")
