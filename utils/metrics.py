@@ -7,7 +7,7 @@ import numpy as np
 #
 
 def compute_iou(outputs, targets):
-    intersection = (outputs & targets).float().sum((1, 2))
+    intersection = (outputs & targets).sum((1, 2))
     union = (outputs | targets).sum(1, 2)
 
     iou = (intersection + SMOOTH) / (union + SMOOTH)
