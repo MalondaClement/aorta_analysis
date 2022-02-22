@@ -112,5 +112,7 @@ if __name__ == "__main__" :
         val_loss.append(np.mean(val_loss_epoch))
         print("Val loss for epoch {} {}".format(epoch, val_loss[-1]))
 
+        torch.save({'epoch': epoch, 'model_state_dict': model.state_dict(), 'optimizer_state_dict': optimizer.state_dict()}, os.path.join("../save", save_path, "checkpoint.pth.tar")
+
     end = time.time()
     print("Training done in {} s".format(end - start))
