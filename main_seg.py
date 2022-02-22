@@ -73,7 +73,7 @@ if __name__ == "__main__" :
 
                 train_loss_epoch.append(loss.item())
 
-                train_iou_epoch.append(compute_iou(torch.argmax(outputs, 1), labels.cpu().numpy()))
+                train_iou_epoch.append(compute_iou(torch.argmax(outputs, 1).cpu().numpy(), labels.cpu().numpy()))
 
                 del inputs
                 del labels
