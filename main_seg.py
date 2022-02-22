@@ -23,8 +23,14 @@ if __name__ == "__main__" :
 
     epochs = 4
     batch_size = 2
+    model_name = "DeepLabV3_MobileNetV3"
+    save_path = model_name + date.today().isoformat() + "-" + str(int(time.time()))
 
-    model = get_2d_segmentation_model("DeepLabV3_MobileNetV3", num_classes=14)
+    if not os.path.isdir("../saves"):
+        os.makedirs("../saves")
+    os.makedirs(os.path.join("../saves",save_path))
+
+    model = get_2d_segmentation_model(model_name, num_classes=14)
     if torch.cuda.is_available():
         model = torch.nn.DataParallel(model).cuda()
         print('Model pushed to {} GPU(s), type {}.'.format(torch.cuda.device_count(), torch.cuda.get_device_name(0)))
