@@ -20,6 +20,7 @@ from torch.utils.data import DataLoader
 from datasets.irm_seg import IRM_SEG
 from models.utils import get_2d_segmentation_model
 from utils.metrics import compute_iou
+from utils.plots import plot_curve
 
 if __name__ == "__main__" :
 
@@ -112,7 +113,11 @@ if __name__ == "__main__" :
         val_loss.append(np.mean(val_loss_epoch))
         print("Val loss for epoch {} {}".format(epoch, val_loss[-1]))
 
-        torch.save({'epoch': epoch, 'model_state_dict': model.state_dict(), 'optimizer_state_dict': optimizer.state_dict()}, os.path.join("../save", save_path, "checkpoint.pth.tar"))
+        torch.save({'epoch': epoch, 'model_state_dict': model.state_dict(), 'optimizer_state_dict': optimizer.state_dict()}, os.path.join("../saves", save_path, "checkpoint.pth.tar"))
 
     end = time.time()
     print("Training done in {} s".format(end - start))
+
+    # plot_curve(title, data1, data2=None, x_title=None, y_title=None, path=None)
+    plot_curve(title="Loss", data1=train_loss, data2=val_loss, path=os.path.join("../saves", save_path, "loss_curve.png"))
+    plot_curve(title="IoU", data1=train_iou, path=os.path.join("../saves", save_path, "iou_curve.png"))
