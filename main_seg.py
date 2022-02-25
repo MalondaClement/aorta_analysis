@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader
 from datasets.irm_seg import IRM_SEG
 from models.utils import get_2d_segmentation_model
 from utils.metrics import compute_iou
-from utils.plots import plot_curve
+from utils.plots import plot_curves
 
 if __name__ == "__main__" :
 
