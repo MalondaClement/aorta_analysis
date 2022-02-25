@@ -40,13 +40,13 @@ class IRM_SEG(Dataset) :
     def __getitem__(self, idx) :
         image = nib.load(os.path.join(self.images_dir, self.images_list[idx][0]))
         tmp = image.get_fdata()[:,:,self.images_list[idx][1]]
+        print(np.min(tmp))
+        print(np.max(tmp))
+        tmp = self.scaler.fit_transform(tmp)
+        print(np.min(tmp))
+        print(np.max(tmp))
         # image = image.get_fdata()[:,:,self.images_list[idx][1]]
         image = np.array([tmp, tmp, tmp])
-        print(np.min(image))
-        print(np.max(image))
-        image = self.scaler.fit_transform(image)
-        print(np.min(image))
-        print(np.max(image))
         image = image.transpose(1, 2, 0)
 
         label = nib.load(os.path.join(self.labels_dir, self.labels_list[idx][0]))
