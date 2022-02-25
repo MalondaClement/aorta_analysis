@@ -118,6 +118,4 @@ if __name__ == "__main__" :
     end = time.time()
     print("Training done in {} s".format(end - start))
 
-    # plot_curve(title, data1, data2=None, x_title=None, y_title=None, path=None)
-    plot_curve(title="Loss", data1=train_loss, data2=val_loss, path=os.path.join("../saves", save_path, "loss_curve.png"))
-    plot_curve(title="IoU", data1=train_iou, path=os.path.join("../saves", save_path, "iou_curve.png"))
+    plot_curves(title="Learning curves", datas=[train_loss, val_loss, train_iou], legends=["Train loss", "Val loss", "mIoU"], path=os.path.join("../saves", save_path, "learning_curves.png"))
