@@ -4,6 +4,10 @@
 
 This Machine Learning project is a pipeline for semantic segmentation for MRI.
 
+## Documentation
+
+https://github.com/MalondaClement/aorta_analysis/wiki
+
 ## 1. Repository tree
 * 📁 aorta_analysis
     * 📁 datasets
