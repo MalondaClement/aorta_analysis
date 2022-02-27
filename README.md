@@ -55,3 +55,4 @@ python main_seg.py
 ```
 python inference.py
 ```
+![img0005](https://user-images.githubusercontent.com/46990837/155891870-3281541e-5bec-4388-bef6-f30ed85c2590.png)
