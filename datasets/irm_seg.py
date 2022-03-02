@@ -5,6 +5,7 @@
 #
 
 import os
+import cv2
 import numpy as np
 import nibabel as nib
 
@@ -25,7 +26,7 @@ class IRM_SEG(Dataset) :
         self.images_list = list()
         self.labels_list = list()
 
-        self.scaler = scaler = MinMaxScaler()
+        self.scaler = MinMaxScaler()
 
         for img in self.images_vol_list :
             image = nib.load(os.path.join(self.images_dir, img))
@@ -41,11 +42,13 @@ class IRM_SEG(Dataset) :
         image = nib.load(os.path.join(self.images_dir, self.images_list[idx][0]))
         tmp = image.get_fdata()[:,:,self.images_list[idx][1]]
         tmp = self.scaler.fit_transform(tmp)
+        tmp = cv2.resize(tmp, (96, 96))
         image = np.array([tmp, tmp, tmp])
         image = image.transpose(1, 2, 0)
 
         label = nib.load(os.path.join(self.labels_dir, self.labels_list[idx][0]))
         label = label.get_fdata()[:,:,self.labels_list[idx][1]]
+        label = cv2.resize(label, (96, 96))
 
         if self.transform:
             image = self.transform(image)
