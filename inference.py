@@ -6,6 +6,7 @@
 
 
 import os
+import cv2
 import time
 import torch
 import numpy as np
@@ -40,6 +41,7 @@ if __name__ == "__main__" :
             data = nib.load(os.path.join("../RawData/Training/img", file))
             tmp = data.get_fdata()[:, :, int(data.get_fdata().shape[2]/2)]
             tmp = scaler.fit_transform(tmp)
+            tmp = cv2.resize(tmp, (96, 96))
             img = np.array([tmp, tmp, tmp])
             img = img.transpose(1, 2, 0)
             input = ToTensor()(img)
