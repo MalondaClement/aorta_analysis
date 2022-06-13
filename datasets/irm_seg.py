@@ -30,7 +30,7 @@ class IRM_SEG(Dataset) :
 
         for img in self.images_vol_list :
             image = nib.load(os.path.join(self.images_dir, img))
-            for i in range(image.shape[2]):
+            for i in range(int(image.shape[2]/3), int((2*image.shape[2])/3)):
                 self.images_list.append((img, i))
                 self.labels_list.append(("label"+img[3:], i))
         print("Total slices : {}".format(len(self.images_list)))
