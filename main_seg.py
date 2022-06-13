@@ -24,6 +24,18 @@ from utils.plots import plot_curves
 
 if __name__ == "__main__" :
 
+    one_class_mode = ""
+    while one_class_mode not in ["yes", "no"]:
+        one_class_mode = input("Do yoy want to use one class mode ? {} : ".format(["yes", "no"]))
+
+    if one_class_mode == "yes":
+        is_unique_label_mode = True
+        num_classes = 1
+    else:
+        is_unique_label_mode = False
+        num_classes = 14
+
+
     epochs = 40
     batch_size = 16
     model_name = "DeepLabV3_MobileNetV3"
@@ -33,15 +45,15 @@ if __name__ == "__main__" :
         os.makedirs("../saves")
     os.makedirs(os.path.join("../saves",save_path))
 
-    model = get_2d_segmentation_model(model_name, num_classes=14)
+    model = get_2d_segmentation_model(model_name, num_classes=num_classes)
     if torch.cuda.is_available():
         model = torch.nn.DataParallel(model).cuda()
         print('Model pushed to {} GPU(s), type {}.'.format(torch.cuda.device_count(), torch.cuda.get_device_name(0)))
 
-    train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", transform=ToTensor())
+    train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", is_unique_label_mode=is_unique_label_mode, label_value=8, transform=ToTensor())
     train_dataloader = DataLoader(train, batch_size=batch_size, shuffle=True, drop_last=True)
 
-    val = IRM_SEG(images_dir="../RawData/Evaluating/img", labels_dir="../RawData/Evaluating/label", transform=ToTensor())
+    val = IRM_SEG(images_dir="../RawData/Evaluating/img", labels_dir="../RawData/Evaluating/label", is_unique_label_mode=is_unique_label_mode, label_value=8, transform=ToTensor())
     val_dataloader = DataLoader(val, batch_size, shuffle=True, drop_last=True)
 
     criterion = nn.CrossEntropyLoss()

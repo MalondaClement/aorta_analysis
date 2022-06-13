@@ -14,7 +14,7 @@ from sklearn.preprocessing import MinMaxScaler
 from torch.utils.data import Dataset
 
 class IRM_SEG(Dataset) :
-    def __init__(self, images_dir, labels_dir, transform=None, target_transform=None) :
+    def __init__(self, images_dir, labels_dir, is_unique_label_mode=False, label_value=-1, transform=None, target_transform=None) :
         self.images_dir = images_dir
         self.labels_dir = labels_dir
         self.transform = transform
@@ -27,6 +27,9 @@ class IRM_SEG(Dataset) :
         self.labels_list = list()
 
         self.scaler = MinMaxScaler()
+
+        self.is_unique_label_mode = is_unique_label_mode
+        self.label_value = label_value
 
         for img in self.images_vol_list :
             image = nib.load(os.path.join(self.images_dir, img))
@@ -49,6 +52,10 @@ class IRM_SEG(Dataset) :
         label = nib.load(os.path.join(self.labels_dir, self.labels_list[idx][0]))
         label = label.get_fdata()[:,:,self.labels_list[idx][1]]
         label = cv2.resize(label, (96, 96))
+
+        if self.is_unique_label_mode:
+            label = np.where(label != self.label_value, 0, label)
+            label = np.where(label == self.label_value, 1, label)
 
         if self.transform:
             image = self.transform(image)
