@@ -26,11 +26,11 @@ if __name__ == "__main__" :
 
     one_class_mode = ""
     while one_class_mode not in ["yes", "no"]:
-        one_class_mode = input("Do yoy want to use one class mode ? {} : ".format(["yes", "no"]))
+        one_class_mode = input("Do you want to use one class mode ? {} : ".format(["yes", "no"]))
 
     if one_class_mode == "yes":
         is_unique_label_mode = True
-        num_classes = 1
+        num_classes = 2
     else:
         is_unique_label_mode = False
         num_classes = 14
