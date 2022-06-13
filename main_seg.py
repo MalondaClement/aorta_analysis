@@ -24,8 +24,8 @@ from utils.plots import plot_curves
 
 if __name__ == "__main__" :
 
-    epochs = 4
-    batch_size = 2
+    epochs = 40
+    batch_size = 16
     model_name = "DeepLabV3_MobileNetV3"
     save_path = model_name + "-" +date.today().isoformat() + "-" + str(int(time.time()))
 
@@ -119,3 +119,6 @@ if __name__ == "__main__" :
     print("Training done in {} s".format(end - start))
 
     plot_curves(title="Learning curves", datas=[train_loss, val_loss, train_iou], legends=["Train loss", "Val loss", "mIoU"], path=os.path.join("../saves", save_path, "learning_curves.png"))
+    print("Train loss: {}".format(train_loss))
+    print("Val loss: {}".format(val_loss))
+    print("IoU: {}".format(train_iou))
