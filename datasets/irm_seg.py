@@ -13,6 +13,8 @@ from sklearn.preprocessing import MinMaxScaler
 
 from torch.utils.data import Dataset
 
+FEATURE_DICT = {"1": "spleen", "2": "right kidney", "3": "left kidney", "4": "gallbladder", "5": "esophagus", "6": "liver", "7": "stomach", "8": "aorta", "9": "inferior vena cava", "10": "portal vein and splenic vein", "11": "pancreas", "12": "right adrenal gland", "13": "left adrenal gland"}
+
 class IRM_SEG(Dataset) :
     def __init__(self, images_dir, labels_dir, is_unique_label_mode=False, label_value=-1, transform=None, target_transform=None) :
         self.images_dir = images_dir

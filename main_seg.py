@@ -17,7 +17,7 @@ import torch.optim as optim
 from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
 
-from datasets.irm_seg import IRM_SEG
+from datasets.irm_seg import IRM_SEG, FEATURE_DICT
 from models.utils import get_2d_segmentation_model
 from utils.metrics import compute_iou
 from utils.plots import plot_curves
@@ -35,6 +35,14 @@ if __name__ == "__main__" :
         is_unique_label_mode = False
         num_classes = 14
 
+    if is_unique_label_mode:
+        selected_label = ""
+        while selected_label not in FEATURE_DICT.keys():
+            print(FEATURE_DICT)
+            selected_label = input("Select a feature value in the list: ")
+        selected_label = int(selected_label)
+    else:
+        selected_label = -1
 
     epochs = 40
     batch_size = 16
@@ -50,10 +58,10 @@ if __name__ == "__main__" :
         model = torch.nn.DataParallel(model).cuda()
         print('Model pushed to {} GPU(s), type {}.'.format(torch.cuda.device_count(), torch.cuda.get_device_name(0)))
 
-    train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", is_unique_label_mode=is_unique_label_mode, label_value=8, transform=ToTensor())
+    train = IRM_SEG(images_dir="../RawData/Training/img", labels_dir="../RawData/Training/label", is_unique_label_mode=is_unique_label_mode, label_value=selected_label, transform=ToTensor())
     train_dataloader = DataLoader(train, batch_size=batch_size, shuffle=True, drop_last=True)
 
-    val = IRM_SEG(images_dir="../RawData/Evaluating/img", labels_dir="../RawData/Evaluating/label", is_unique_label_mode=is_unique_label_mode, label_value=8, transform=ToTensor())
+    val = IRM_SEG(images_dir="../RawData/Evaluating/img", labels_dir="../RawData/Evaluating/label", is_unique_label_mode=is_unique_label_mode, label_value=selected_label, transform=ToTensor())
     val_dataloader = DataLoader(val, batch_size, shuffle=True, drop_last=True)
 
     criterion = nn.CrossEntropyLoss()
