@@ -47,13 +47,13 @@ class IRM_SEG(Dataset) :
         image = nib.load(os.path.join(self.images_dir, self.images_list[idx][0]))
         tmp = image.get_fdata()[:,:,self.images_list[idx][1]]
         tmp = self.scaler.fit_transform(tmp)
-        tmp = cv2.resize(tmp, (96, 96))
+        tmp = cv2.resize(tmp, (96, 96), interpolation=cv2.INTER_NEAREST)
         image = np.array([tmp, tmp, tmp])
         image = image.transpose(1, 2, 0)
 
         label = nib.load(os.path.join(self.labels_dir, self.labels_list[idx][0]))
         label = label.get_fdata()[:,:,self.labels_list[idx][1]]
-        label = cv2.resize(label, (96, 96))
+        label = cv2.resize(label, (96, 96), interpolation=cv2.INTER_NEAREST)
 
         if self.is_unique_label_mode:
             label = np.where(label != self.label_value, 0, label)
