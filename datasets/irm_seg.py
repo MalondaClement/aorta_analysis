@@ -13,8 +13,10 @@ from sklearn.preprocessing import MinMaxScaler
 
 from torch.utils.data import Dataset
 
+FEATURE_DICT = {"1": "spleen", "2": "right kidney", "3": "left kidney", "4": "gallbladder", "5": "esophagus", "6": "liver", "7": "stomach", "8": "aorta", "9": "inferior vena cava", "10": "portal vein and splenic vein", "11": "pancreas", "12": "right adrenal gland", "13": "left adrenal gland"}
+
 class IRM_SEG(Dataset) :
-    def __init__(self, images_dir, labels_dir, transform=None, target_transform=None) :
+    def __init__(self, images_dir, labels_dir, is_unique_label_mode=False, label_value=-1, transform=None, target_transform=None) :
         self.images_dir = images_dir
         self.labels_dir = labels_dir
         self.transform = transform
@@ -28,9 +30,12 @@ class IRM_SEG(Dataset) :
 
         self.scaler = MinMaxScaler()
 
+        self.is_unique_label_mode = is_unique_label_mode
+        self.label_value = label_value
+
         for img in self.images_vol_list :
             image = nib.load(os.path.join(self.images_dir, img))
-            for i in range(image.shape[2]):
+            for i in range(int(image.shape[2]/3), int((2*image.shape[2])/3)):
                 self.images_list.append((img, i))
                 self.labels_list.append(("label"+img[3:], i))
         print("Total slices : {}".format(len(self.images_list)))
@@ -42,13 +47,17 @@ class IRM_SEG(Dataset) :
         image = nib.load(os.path.join(self.images_dir, self.images_list[idx][0]))
         tmp = image.get_fdata()[:,:,self.images_list[idx][1]]
         tmp = self.scaler.fit_transform(tmp)
-        tmp = cv2.resize(tmp, (96, 96))
+        tmp = cv2.resize(tmp, (96, 96), interpolation=cv2.INTER_NEAREST)
         image = np.array([tmp, tmp, tmp])
         image = image.transpose(1, 2, 0)
 
         label = nib.load(os.path.join(self.labels_dir, self.labels_list[idx][0]))
         label = label.get_fdata()[:,:,self.labels_list[idx][1]]
-        label = cv2.resize(label, (96, 96))
+        label = cv2.resize(label, (96, 96), interpolation=cv2.INTER_NEAREST)
+
+        if self.is_unique_label_mode:
+            label = np.where(label != self.label_value, 0, label)
+            label = np.where(label == self.label_value, 1, label)
 
         if self.transform:
             image = self.transform(image)
